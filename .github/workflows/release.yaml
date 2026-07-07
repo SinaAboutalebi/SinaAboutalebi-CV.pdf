@@ -2,11 +2,14 @@ name: 📄✨ Release CV
 
 on:
   push:
+    branches:
+      - main
+    tags:
+      - '*'
     paths:
       - .github/workflows/latex.yaml
       - '**.tex'
       - '**.toml'
-  workflow_dispatch:
 
 jobs:
   build_latex:
@@ -30,7 +33,7 @@ jobs:
 
       - name: ✨ Create Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.ref_type == 'tag'
         with:
           files: build/SinaAboutalebi/SinaAboutalebi.pdf
         env:
