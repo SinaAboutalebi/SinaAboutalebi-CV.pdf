@@ -1,25 +1,32 @@
 name: 📄✨ Release CV
+
 on:
   push:
     paths:
       - .github/workflows/latex.yaml
       - '**.tex'
+      - '**.toml'
   workflow_dispatch:
-  
+
 jobs:
   build_latex:
     runs-on: ubuntu-latest
-    steps:
 
+    steps:
       - name: 🛠️ Checkout Repository
         uses: actions/checkout@v4
 
       - name: 🚀 Set Up Tectonic
         uses: wtfjoke/setup-tectonic@v3
         with:
+          tectonic-version: 0.15.0
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧹 Clear Tectonic Cache
+        run: rm -rf ~/.cache/Tectonic
+
       - name: 🏗️ Build Resume in LaTeX
-        run: tectonic -X build
+        run: tectonic -X build --keep-logs
 
       - name: ✨ Create Release
         uses: softprops/action-gh-release@v1
